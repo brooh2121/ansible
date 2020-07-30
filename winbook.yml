@@ -7,19 +7,12 @@
   - name: Ping servers
     win_ping:
 
-  - name: Copy file to WinMachine
-    win_copy:
-      src: test2.txt
-      dest: C:\temp\test2.txt
- 
-  - name: DownLoad tomcat.exe on WinMachine
-    win_get_url:
-      url: https://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.exe
-      dest: C:\temp\apache-tomcat-9.0.37.exe
-
-  - name: Install tomcat.exe on WinMachine
+  - name: Install JDK8 on Windows Machine
     win_package:
-      path: C:\temp\apache-tomcat-9.0.37.exe
-      product_id: '{Tomcat 9.0.37 Tomcat9}'
-      arguments: '/q /norestart'
-      ensure: present
+      path: C:\\temp\\jdk-8u261-windows-i586.exe
+      product_id: jdk-8u261
+      arguments:
+      - /s
+      - /quiet
+      state: present
+      log_path: D:\temp\jdk8.log
