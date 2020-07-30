@@ -1,0 +1,19 @@
+[CentosMachines]
+
+CentosMachine1 ansible_host=192.168.99.100 ansible_port=2021
+
+[WindowsMachines]
+
+WindowsMachine ansible_host=192.168.88.254
+
+
+[CentosMachines:vars]
+ansible_user=root
+ansible_password=123qweasd
+
+[WindowsMachines:vars]
+ansible_user=WinMachine
+ansible_password=123qweasd
+ansible_port=5985
+ansible_connection = winrm
+ansible_winrm_server_cert_validation = ignore
