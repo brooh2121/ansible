@@ -9,10 +9,75 @@
 
   - name: Install JDK8 on Windows Machine
     win_package:
-      path: C:\\temp\\jdk-8u261-windows-i586.exe
-      product_id: jdk-8u261
+      path: C:\temp\jdk-8u261-windows-i586.exe 
+      product_id: jdk8
       arguments:
       - /s
       - /quiet
       state: present
-      log_path: D:\temp\jdk8.log
+  
+  - name: Add JAVA_BIN ENV
+    win_path:
+      name: PATH
+      elements: C:\Program Files\Java\jdk1.8.0_261\bin
+      scope: machine
+      state: present
+
+  - name: Add Java_HOME ENV
+    win_path:
+      name: PATH
+      elements: C:\Program Files\Java\jdk1.8.0_261
+      scope: machine
+      state: present
+
+  - name: check JDK shell
+    win_shell: "java -version"
+    args:
+      executable: cmd
+    register: java_version
+
+  - debug: msg="{{java_version.stderr_lines}}"
+
+  - name: Download Apache Tomcat ZIP
+    win_get_url:
+      url: https://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37-windows-x86.zip
+      dest: C:\temp\
+
+  - name: Unzip Apache Tomcat
+    win_unzip:
+      src: C:\temp\apache-tomcat-9.0.37-windows-x86.zip
+      dest: C:\temptomcat\
+      creates: C:\temptomcat\
+
+  - name: Move tomcatFiles to other directory
+    win_copy:
+      src: C:/temptomcat/apache-tomcat-9.0.37/
+      dest: C:\tomcat\
+      remote_src: yes
+
+  - name: RemoveTempTomcat
+    win_file:
+      path: C:\temptomcat\
+      state: absent
+
+  - name: Create Node1 In Tomcat with conf empty folder
+    win_file:
+      path: C:\tomcat\nodes\nodeOne\conf\
+      state: directory
+
+  - name: Create Node2 in Tomcat win conf empty folder
+    win_file:
+      path: C:\tomcat\nodes\nodeTwo\conf\
+      state: directory
+
+  - name: Copy TomcatBin Folder to nodeOne
+    win_copy:
+      src: C:\tomcat\conf\
+      dest: C:\tomcat\nodes\nodeOne\conf\
+      remote_src: yes
+
+  - name: Copy TomcatBin Folder to NodeTwo
+    win_copy:
+      src: C:\tomcat\conf\
+      dest: C:\tomcat\nodes\nodeTwo\conf\
+      remote_src: yes
