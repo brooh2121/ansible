@@ -60,24 +60,21 @@
       path: C:\temptomcat\
       state: absent
 
-  - name: Create Node1 In Tomcat with conf empty folder
-    win_file:
-      path: C:\tomcat\nodes\nodeOne\conf\
-      state: directory
+  - name: Install Tomcat As Win Service
+    win_shell: C:\tomcat\bin\service.bat install tomcat9
+    args:
+      chdir: C:\tomcat\bin
 
-  - name: Create Node2 in Tomcat win conf empty folder
-    win_file:
-      path: C:\tomcat\nodes\nodeTwo\conf\
-      state: directory
-
-  - name: Copy TomcatBin Folder to nodeOne
+  - name: push war to webapps
     win_copy:
-      src: C:\tomcat\conf\
-      dest: C:\tomcat\nodes\nodeOne\conf\
+      src: C:\temp\forTest-0.0.1.war
+      dest: C:\tomcat\webapps\
       remote_src: yes
 
-  - name: Copy TomcatBin Folder to NodeTwo
-    win_copy:
-      src: C:\tomcat\conf\
-      dest: C:\tomcat\nodes\nodeTwo\conf\
-      remote_src: yes
+  - name: start tomcat Service
+    win_shell: net start tomcat9
+
+  - name: GET URL test APP
+    win_uri:
+      url: http://localhost:8080/forTest-0.0.1/index.jsp
+      return_content: yes

@@ -1,0 +1,12 @@
+---
+- name: Reboot Win Machines
+  hosts: WindowsMachines
+
+  tasks:
+  
+  - name: Ping Servers
+    win_ping:
+
+  - name: Reboot Machine
+    win_reboot:
+      post_reboot_delay: 120
