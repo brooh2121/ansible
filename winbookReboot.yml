@@ -9,4 +9,4 @@
 
   - name: Reboot Machine
     win_reboot:
-      post_reboot_delay: 120
+      post_reboot_delay: 5
