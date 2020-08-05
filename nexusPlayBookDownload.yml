@@ -2,6 +2,15 @@
 - name: test download from Nexus
   hosts: WindowsMachines
 
+  vars:
+    nexus_usr_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37386638336366373664636537626163663965306135663237646430616666643837396533373437
+          3733363963306637386336313236643532313637616262300a306536653666386433626133643539
+          39356561383530383464383431363666656234316139326239666563656662303261336536393530
+          6466303765356166620a623333653063643736663538356466303133333136393238663162613363
+          3063
+
   tasks:
 
   - name: Ping servers
@@ -12,5 +21,4 @@
       url:  http://192.168.88.254:8081/repository/distr/test/apache-tomcat-9.0.37-windows-x86.zip
       dest: C:\tempForNexus\apache-tomcat-9.0.37-windows-x86.zip
       url_username: admin
-      url_password: admin123
-
+      url_password: "{{ nexus_usr_pass }}"
