@@ -7,14 +7,21 @@ CentosMachine1 ansible_host=192.168.99.100 ansible_port=2021
 WindowsMachine ansible_host=192.168.88.254
 
 [AllMachines:children]
+
 CentosMachines
 WindowsMachines
 
+[AllWinMachine:children]
+
+WindowsMachines
+
 [CentosMachines:vars]
+
 ansible_user=root
 ansible_password=123qweasd
 
-[WindowsMachines:vars]
+[AllWinMachine:vars]
+
 ansible_user=WinMachine
 ansible_password=123qweasd
 ansible_port=5985
