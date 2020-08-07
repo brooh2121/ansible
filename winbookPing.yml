@@ -1,0 +1,8 @@
+---
+- name: test ping win Machines
+  hosts: WindowsMachines
+
+  tasks:
+
+  - name: Ping servers
+    win_ping:
