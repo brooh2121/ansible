@@ -1,0 +1,64 @@
+поставил docker image с centos+ssh
+docker run -it --name=CentosMachine1 -p 2021:22 ubnare/centos-with-ssh
+
+на машину установил nping (yum install nmap)
+проверяем доступность порта с мастер машины где установлен Ansible
+nping --tcp -p 2021 192.168.99.100 -c 3 (потерь не было)
+
+команда ssh -p 2021 192.168.99.100 (выполнена с машины где развернут ansible - успешно подключились к CentosMachine1)
+
+содержимое файла hosts 
+------
+[test]
+
+CentosMachine1 ansible_host=192.168.99.100 ansible_port=2021 ansible_user=root ansible_password=123qweasd
+------
+
+AD-HOC команда для проверки
+
+ansible -t hosts all -m ping (пингуем все хосты из инвентаря)
+
+ansible-inventory --list (получаем список машин из инвентаря)
+
+ansible-inventory --graph (получаем список машин из инвентаря в виде псевдографики)
+
+ansible all -m setup (полная инфа по машинам, работает и на винде)
+
+ansible all -m shell -a "pwd" (способ выполнения команд на машинах через ansible)
+
+ansible all -m shell -a "yum install nmap -y" (поставил nmap на всех машинах с подтверждением на установку)
+
+ansible all -m copy -a "src=test1.txt dest=/home mode=777" -b (скопировали файлик с машины где ансибл на все машины в папку home, -b это sudo)
+
+ansible all -m file -a "path=/home/test2.txt state=absent" (удалили ранее загруженный файлик со всех машин, главное соблюдать правильность указания пути)
+
+ansible all -m yum -a "name=nmap state=removed" -b (удаление ранее развернутого пакета)
+
+ansible all -m uri -a "url=http://google.com" (запуск CURL подобной манипуляции на каждой машине)
+
+ansible all -m uri -a "url=http://google.com return_content=yes" (аналог команды выше, но еще и возвращает контент - текст самой страницы)
+
+ansible all -m service -a "name=httpd state=started enabled=yes" -b (запускает приложение как службу, enabled - подразумевает запуск службы при старте системы)
+
+nping --tcp -p 5986 192.168.88.254 -c 3
+
+winrm quickconfig -q
+
+winrm set winrm/config/service @{AllowUnencrypted="true"
+ansible -t hosts WindowsMachines -m win_ping - "пингуем виндовский сервак"
+ansible -i hosts WindowsMachines -m win_service -a "name=Audiosrv state=started" (запустили службу)
+
+----------
+vault
+----------
+
+ansible-vault create mysecret.txt (создаем зашифрованный файл mysecret)
+ansible-vault view mysecret.txt (открываем файл для просмотра)
+ansible-vault edit mysecret.txt (открываем для редактирования)
+ansible-vault encrypt test1.txt (шифруем имеющийся файл)
+ansible-vault rekey test1.txt (меняем пароль к файлу)
+ansible-vault decrypt test1.txt (убираем шифрование файла)
+ansible-playbook winbookReboot.yml --vault-password-file pass.txt (Запуск playbook с паролем из файла)
+ansible-vault encrypt_string (шифруем строку, которую введем после ввода пароля)
+ansible-vault encrypt_string --stdin-name "MyPassword" (то же самое что и выше, только добавляет MyPassword между паролем и его зашифрованной версией)
+ansible-playbook winbookPing.yml --vault-password-file pass.txt -e ansible_password=123qweasd (пароль передаем в команде на случай если в hosts он не указан)
