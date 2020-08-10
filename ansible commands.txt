@@ -1,4 +1,4 @@
-поставил docker image с centos+ssh
+﻿поставил docker image с centos+ssh
 docker run -it --name=CentosMachine1 -p 2021:22 ubnare/centos-with-ssh
 
 на машину установил nping (yum install nmap)
@@ -62,3 +62,4 @@ ansible-playbook winbookReboot.yml --vault-password-file pass.txt (Запуск 
 ansible-vault encrypt_string (шифруем строку, которую введем после ввода пароля)
 ansible-vault encrypt_string --stdin-name "MyPassword" (то же самое что и выше, только добавляет MyPassword между паролем и его зашифрованной версией)
 ansible-playbook winbookPing.yml --vault-password-file pass.txt -e ansible_password=123qweasd (пароль передаем в команде на случай если в hosts он не указан)
+ansible-playbook winbookPing.yml -i hosts --ask-vault-pass -u WinMachine -e 123qweasd -v (любопытный вариант вызова плейбука)
