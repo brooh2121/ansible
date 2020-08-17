@@ -1,0 +1,28 @@
+---
+- gather_facts: false
+
+  hosts: localhost
+
+  vars:
+    remote:
+      - 192.168.88.254
+      - 192.168.99.100
+
+  tasks:
+    - command: pwd
+
+    - command: telnet "{{ item }}" 5985
+      with_items: "{{ remote  }}"
+      ignore_errors: True
+
+    - command: telnet "{{ item }}" 5986
+      with_items: "{{ remote }}"
+      ignore_errors: True
+
+    - command: nping --tcp -p 5985 "{{ item }}"
+      with_items: "{{ remote }}"
+      ignore_errors: True
+
+    - command: nping --tcp -p 5986 "{{ item }}"
+      with_items: "{{ remote }}"
+      ignore_errors: True
