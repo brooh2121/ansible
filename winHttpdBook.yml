@@ -1,0 +1,73 @@
+---
+- name: install and deploy Apache HTTPD
+  hosts: WindowsMachine
+  
+  tasks:
+  
+  - name: download VC_redist.x86
+    win_get_url:
+      url: http://192.168.88.254:8081/repository/distr/test/VC_redist.x86.exe
+      dest: C:\tempForNexus\
+      url_username: admin
+      url_password: admin123
+
+  - name: install VC_redist.x86
+    win_package:
+      path: C:\tempForNexus\VC_redist.x86.exe
+      product_id: VC_redist.x86
+      arguments:
+      - /install
+      - /passive
+      - /norestart
+
+  - name: download Apache httpd
+    win_get_url:
+      url: http://192.168.88.254:8081/repository/distr/test/httpd-2.4.46-win32-VS16.zip
+      dest: C:\tempForNexus\
+      url_username: admin
+      url_password: admin123
+
+  - name: unzip Apache httpd
+    win_unzip:
+      src: C:\tempForNexus\httpd-2.4.46-win32-VS16.zip
+      dest: C:\
+
+  - name: edit httpd.conf
+    win_lineinfile:
+      path: C:\Apache24\conf\httpd.conf
+      line: include "conf.d/*.conf"
+      insertafter: EOF
+
+  - name: download conf.d.zip from Nexus
+    win_get_url:
+      url: http://192.168.88.254:8081/repository/distr/test/conf.d.zip
+      dest: C:\tempForNexus\
+      url_username: admin
+      url_password: admin123
+
+  - name: unzip conf.d.zip from Nexus
+    win_unzip:
+      src: C:\tempForNexus\conf.d.zip
+      dest: C:\tempForNexus\
+
+  - name: create conf.d empty folder
+    win_file: 
+      path: C:\Apache24\conf.d
+      state: directory
+
+  - name: copy unziped conf.d to empty folder
+    win_copy:
+      src: C:/tempForNexus/conf.d/
+      dest: C:\Apache24\conf.d\
+      remote_src: yes
+
+  - name: check HTTPD Syntax
+    win_shell: C:\Apache24\bin\httpd.exe -t
+
+  - name: install Apache24 service
+    win_shell: C:\Apache24\bin\httpd.exe -k install -n "Apache24"
+    args:
+      chdir: C:\Apache24\bin
+
+  - name: start Apache24 service
+    win_shell: net start Apache24
