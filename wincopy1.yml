@@ -1,0 +1,9 @@
+---
+- name: copy from ansible master to host
+  hosts: "{{ host_dest }}"
+
+  tasks:
+  - name: copy file
+    win_copy:
+      src: /tmp/new_folder/
+      dest: C:\tmp\

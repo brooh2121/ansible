@@ -1,0 +1,28 @@
+---
+- name: test download from Nexus
+  hosts: WindowsMachines
+
+  tasks:
+  - name: download to Local
+    get_url:
+      url: http://192.168.88.254:8081/repository/distr/test/VC_redist.x86.exe
+      dest: /tmp/VC_redist.x86.exe
+      url_username: admin
+      url_password: admin123
+    delegate_to: localhost
+
+  - name: copy from ansible master to hosts
+    win_copy:
+      src: /tmp/VC_redist.x86.exe
+      dest: C:\temp\
+
+  - name: check dir
+    win_stat:
+      path: C:\temp\
+    register: dir_info
+
+  - name: create dir
+    win_file:
+      path: C:\temp\
+      state: directory
+    when: dir_info.stat.exists == False

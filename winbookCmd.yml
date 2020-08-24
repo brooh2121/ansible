@@ -1,0 +1,12 @@
+---
+- name: test run cmd command with stdin catch
+  hosts: WindowsMachines
+
+  tasks:
+  - name: run win_shell
+    win_shell: dir
+    args:
+      executable: cmd
+    register: input_result
+
+  - debug: msg="{{input_result.stdin}}"

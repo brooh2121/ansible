@@ -1,0 +1,11 @@
+---
+- name: test copy file from folder to another folder
+  hosts: WindowsMachines
+
+
+  tasks:
+  - name: copy file
+    win_copy:
+      src: C:\temp\test2.txt
+      dest: C:\tempForNexus\
+      remote_src: yes

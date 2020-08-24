@@ -1,0 +1,16 @@
+---
+- name: test copy
+  hosts: WindowsMachines
+  
+  tasks:
+  - name: execute copy to master ansible
+    fetch:
+      src: C:\tempForNexus\file\test1.txt
+      dest: /tmp/new_folder/
+      flat: yes
+
+  - name: execute copy to master ansible
+    fetch:
+      src: C:\tempForNexus\file\test2.txt
+      dest: /tmp/new_folder/
+      flat: yes

@@ -1,0 +1,7 @@
+---
+- name: test setup with extra_vars
+  hosts: WindowsMachine
+  
+  tasks:
+  - name: execute setup command
+    win_shell: echo %cd%

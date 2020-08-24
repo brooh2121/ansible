@@ -1,0 +1,7 @@
+---
+- gathering_facts: false
+  hosts: CentosMachines
+
+  tasks:
+  - name: execute ping
+    ping:

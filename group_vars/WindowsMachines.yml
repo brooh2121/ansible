@@ -1,0 +1,6 @@
+---
+ansible_user: WinMachine
+ansible_password: 123qweasd
+ansible_port: 5985
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore

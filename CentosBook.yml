@@ -1,0 +1,27 @@
+---
+- name: deployTestApp to Centos Machines
+  hosts: CentosMachines
+
+  tasks:
+
+  - name: ping servers
+    ping:
+
+  - name: Jdk install
+    shell: "yum install java-1.8.0-openjdk"
+
+  - name: Java check
+    shell: "java -version"
+    register: java_version
+
+  - debug: msg="{{java_version.stderr_lines}}"
+
+  - name: download test app
+    get_url:
+      url: http://192.168.88.254:8081/repository/maven-releases/com/PLSQLTest/func/1.0/func-1.0.jar
+      dest: /root/func-1.0.jar
+      username: admin
+      password: admin123
+
+  - name: start jar
+    shell: "java -jar /root/func-1.0.jar"

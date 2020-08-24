@@ -1,0 +1,4 @@
+---
+ansible_user: root
+ansible_password: 123qweasd
+ansible_port: 2021

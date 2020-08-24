@@ -63,3 +63,9 @@ ansible-vault encrypt_string (шифруем строку, которую вве
 ansible-vault encrypt_string --stdin-name "MyPassword" (то же самое что и выше, только добавляет MyPassword между паролем и его зашифрованной версией)
 ansible-playbook winbookPing.yml --vault-password-file pass.txt -e ansible_password=123qweasd (пароль передаем в команде на случай если в hosts он не указан)
 ansible-playbook winbookPing.yml -i hosts --ask-vault-pass -u WinMachine -e 123qweasd -v (любопытный вариант вызова плейбука)
+
+-------
+extra_vars
+-------
+ ansible-playbook setupbook.yml -e "host=CentosMachine1" -v (пример передачи переменной при выполнении плейбука)
+ansible-playbook setupbook.yml -t hosts.yml -u ansible_user=WinMachine -e "ansible_password=123qweasd host=WindowsMachine" -v (когда в hosts только порт)
