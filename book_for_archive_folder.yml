@@ -1,0 +1,7 @@
+---
+- gather_facts: false
+  hosts: "{{ win_host_name }}"
+
+  tasks:
+  - name: Archive folder
+    win_shell: Compress-Archive -Path {{ src_path_folder }} -DestinationPath {{ dest_path_folder }}/{{ win_host_name }}_test.zip

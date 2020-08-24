@@ -69,3 +69,4 @@ extra_vars
 -------
  ansible-playbook setupbook.yml -e "host=CentosMachine1" -v (пример передачи переменной при выполнении плейбука)
 ansible-playbook setupbook.yml -t hosts.yml -u ansible_user=WinMachine -e "ansible_password=123qweasd host=WindowsMachine" -v (когда в hosts только порт)
+ansible-playbook -i hosts.yml book_for_archive_folder.yml -e "win_host_name=WindowsMachines src_path_folder=C:/tempForNexus/conf.d* dest_path_folder=C:/tempForNexus/conf.d/" -v (используем ряд переменных для создания архива с указанием хоста в качестве переменной)

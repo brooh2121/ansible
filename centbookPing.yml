@@ -1,5 +1,5 @@
 ---
-- gathering_facts: false
+- gather_facts: false
   hosts: CentosMachines
 
   tasks:
